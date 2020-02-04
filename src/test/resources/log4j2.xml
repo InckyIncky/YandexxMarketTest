@@ -1,0 +1,42 @@
+<Configuration status="WARN" strict="true" name="TestConfig">
+    <Appenders>
+        <Console name="STDOUT">
+            <PatternLayout pattern="%d %c{1.} [%t] %-5level: %msg%n%throwable"/>
+        </Console>
+        <RollingFile name="ChromeFileLog" filename="logs/log4j2.chrome.log"
+                     filepattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>
+                    %d %p %c{1.} [%t] %-5level: %msg%n%throwable
+                </Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="FirefoxFileLog" filename="logs/log4j2.firefox.log"
+                     filepattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>
+                    %d %p %c{1.} [%t] %m%n
+                </Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="ERROR">
+            <AppenderRef ref="STDOUT"/>
+        </Root>
+        <Logger name="ChromeTestLog" level="INFO" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="ChromeFileLog"/>
+        </Logger>
+        <Logger name="FirefoxTestLog" level="INFO" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="FirefoxFileLog"/>
+        </Logger>
+    </Loggers>
+</Configuration>
