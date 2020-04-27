@@ -1,55 +1,18 @@
-package YandexTests;
+package Tests;
 
 import java.time.Duration;
 import java.util.*;
 
-import Driverfactory.Browsers;
-import Driverfactory.WebDriverFactory;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.*;
 
-import java.util.concurrent.TimeUnit;
-
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class MarketTest {
-    private static WebDriver driver;
-    private static final Logger LOGGER = LogManager.getLogger("ChromeTestLog");
-
-
-    private static final By XIAOMI_CHECK_BOX_LOCATOR = By.id("7893318_7701962");
-    private static final By HONOR_CHECK_BOX_LOCATOR = By.id("7893318_15292504");
-    private static final By SORT_BY_PRICE_BTN_LOCATOR = By.cssSelector("div[data-bem*='id\":\"aprice\"");
-
-    private static final By FIRST_XIAOMI_PHONE_BTN_LOCATOR = By.cssSelector("div[data-id='model-401338434']");
-    private static final By ADD_TO_CART_XIAOMI_BTN_LOCATOR = By.cssSelector("div[data-bem*='id\":\"401338434\"']");
-    private static final By ADD_TO_CART_HONOR_BTN_LOCATOR = By.cssSelector("div[data-bem*='id\":\"85840670\"']");
-    private static final By PHONE_ADDED_BAR_LOCATOR = By.cssSelector("div[class='popup-informer__title']");
-
-    private static final By COMPARE_BTN_LOCATOR = By.cssSelector("a[class='button button_size_m button_theme_action i-bem button_js_inited']");
-    private static final By ITEMS_TO_COMPARE_LOCATOR = By.cssSelector("div[class*='n-compare-cell n-compare-'");
-    private static final By ALL_PARAMS_LOCATOR = By.cssSelector("span[class='link n-compare-show-controls__all']");
-    private static final By OPERATION_SYSTEM_LOCATOR = By.xpath("//div[text()= 'Операционная система']");
-    private static final By DIFFERENT_PARAMS_LOCATOR = By.cssSelector("span[class='link n-compare-show-controls__diff']");
-
-
-
-    @BeforeClass
-    public static void setUp() {
-        driver = WebDriverFactory.create(Browsers.CHROME);
-        driver.manage().timeouts().implicitlyWait(4, TimeUnit.SECONDS);
-        driver.manage().window().maximize();
-
-        LOGGER.info("webdriver configured");
-    }
+public class MarketTest extends BaseClass {
 
     @Test
     public void yaMarketTest() {
@@ -67,7 +30,7 @@ public class MarketTest {
         WebDriverWait wait = new WebDriverWait(driver, 30, 200);
 
         wait.withTimeout(Duration.ofSeconds(30L))
-                .pollingEvery(Duration.ofSeconds(3))
+                .pollingEvery(Duration.ofSeconds(3L))
                 .until(ExpectedConditions.elementToBeClickable(FIRST_XIAOMI_PHONE_BTN_LOCATOR));
 
         WebElement xiaomiPhone = driver.findElement(FIRST_XIAOMI_PHONE_BTN_LOCATOR);
@@ -104,7 +67,7 @@ public class MarketTest {
         String comparationPageActual = "Смартфон Honor 7AСмартфон Xiaomi Redmi Go 1/8GB";
         String comparationPageExpectation = itemsToCompare.get(0).getText() + itemsToCompare.get(1).getText();
 
-        Assert.assertEquals("These are not the phones I'd like to compare",comparationPageActual,
+        Assert.assertEquals("These are not the phones I'd like to compare", comparationPageActual,
                 comparationPageExpectation);
         driver.findElement(ALL_PARAMS_LOCATOR).click();
 
@@ -119,7 +82,7 @@ public class MarketTest {
         driver.findElement(DIFFERENT_PARAMS_LOCATOR).click();
         wait.until(ExpectedConditions.invisibilityOfElementLocated(OPERATION_SYSTEM_LOCATOR));
 
-        isOperationSystemVisible =  driver.findElement(OPERATION_SYSTEM_LOCATOR).isDisplayed();
+        isOperationSystemVisible = driver.findElement(OPERATION_SYSTEM_LOCATOR).isDisplayed();
 
         if (isOperationSystemVisible) {
             LOGGER.info("Operation system is present, it's unexpected");
@@ -130,9 +93,4 @@ public class MarketTest {
         Assert.assertFalse("Operation system is not present, it's unexpected", isOperationSystemVisible);
     }
 
-    @AfterClass
-    public static void tearDown() {
-        if (driver != null)
-            driver.quit();
-    }
 }

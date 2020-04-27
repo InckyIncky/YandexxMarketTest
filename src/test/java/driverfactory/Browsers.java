@@ -1,4 +1,4 @@
-package Driverfactory;
+package driverfactory;
 
 public enum Browsers {
     CHROME,
